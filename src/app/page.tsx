@@ -15,9 +15,9 @@ export default function Home() {
       icon: "🗄️"
     },
     {
-      title: "Customizable & Modular",
-      desc: "Naye dynamic routes, APIs, auth, aur dashboards bina kisi extra setup ke add karo.",
-      icon: "🛠️"
+      title: "Interactive Dashboard",
+      desc: "Live CRUD management panel direct database sync ke sath.",
+      icon: "📊"
     }
   ];
 
@@ -30,12 +30,9 @@ export default function Home() {
             🚀 MyPlatform
           </span>
           <nav className="flex items-center gap-4">
-            <Link href="/api/users" target="_blank" className="text-sm font-medium text-slate-400 hover:text-white transition">
-              API Status
-            </Link>
-            <Link href="#features">
+            <Link href="/dashboard">
               <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
-                Get Started
+                Open Dashboard
               </Button>
             </Link>
           </nav>
@@ -54,12 +51,14 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          Production-ready architecture jisme authentication, cloud database, aur reusable UI components pre-configured hain.
+          Production-ready architecture jisme authentication, live PostgreSQL database manager, aur dynamic dashboard integrated hain.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
-            Launch Dashboard
-          </Button>
+          <Link href="/dashboard">
+            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
+              Launch Dashboard
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
             Documentation
           </Button>
