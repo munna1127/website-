@@ -19,7 +19,7 @@ export default function AboutPage() {
         {/* Top Bar Navigation */}
         <div className="flex items-center justify-between border-b border-slate-800/80 pb-6">
           <Link href="/" className="font-extrabold text-xl text-white tracking-tight flex items-center gap-2">
-            🚀 MyPlatform
+            🚀 Aryan Tomar
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/dashboard">
@@ -58,6 +58,58 @@ export default function AboutPage() {
               </CardDescription>
             </CardHeader>
           </Card>
+        </div>
+
+        {/* Connect & Direct Channels Section */}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-white border-b border-slate-800 pb-2">📬 Connect & Direct Channels</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <Card className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition">
+              <CardHeader className="p-4">
+                <CardDescription className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Official Email</CardDescription>
+                <CardTitle className="text-sm font-medium text-white mt-1">
+                  <a href="mailto:aryantomar4327@gmail.com" className="text-indigo-400 hover:underline">
+                    aryantomar4327@gmail.com
+                  </a>
+                </CardTitle>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition">
+              <CardHeader className="p-4">
+                <CardDescription className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Telegram Channel</CardDescription>
+                <CardTitle className="text-sm font-medium text-white mt-1">
+                  <a href="https://t.me/tomar_ji_99" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
+                    @tomar_ji_99
+                  </a>
+                </CardTitle>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition">
+              <CardHeader className="p-4">
+                <CardDescription className="text-xs text-slate-400 uppercase tracking-wider font-semibold">GitHub (Primary)</CardDescription>
+                <CardTitle className="text-sm font-medium text-white mt-1">
+                  <a href="https://github.com/munna1127" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
+                    github.com/munna1127
+                  </a>
+                </CardTitle>
+              </CardHeader>
+            </Card>
+
+            <Card className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition">
+              <CardHeader className="p-4">
+                <CardDescription className="text-xs text-slate-400 uppercase tracking-wider font-semibold">GitHub (Secondary)</CardDescription>
+                <CardTitle className="text-sm font-medium text-white mt-1">
+                  <a href="https://github.com/tomar-ji" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
+                    github.com/tomar-ji
+                  </a>
+                </CardTitle>
+              </CardHeader>
+            </Card>
+
+          </div>
         </div>
 
         {/* About Me Section */}
