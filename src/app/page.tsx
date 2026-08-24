@@ -11,9 +11,9 @@ export default function Home() {
       icon: "🛡️"
     },
     {
-      title: "Live Forensics Tools",
-      desc: "Interactive Shannon Entropy mathematical scanner for encrypted anomaly detection.",
-      icon: "🔬"
+      title: "Projects & Tooling Vault",
+      desc: "Open source threat telemetry, OSINT processors, and memory forensics modules.",
+      icon: "📂"
     },
     {
       title: "Secure Auth & Dashboard",
@@ -30,10 +30,15 @@ export default function Home() {
           <span className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
             🚀 Aryan Tomar
           </span>
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-2 sm:gap-3">
+            <Link href="/projects">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+                Projects
+              </Button>
+            </Link>
             <Link href="/about">
               <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
-                About Me
+                About
               </Button>
             </Link>
             <Link href="/tools/entropy">
@@ -70,14 +75,14 @@ export default function Home() {
           Problem-driven backend architecture, protocol research, and cloud automation built entirely via mobile POSIX subsystems.
         </p>
         <div className="flex flex-wrap justify-center gap-4 mb-14">
-          <Link href="/about">
+          <Link href="/projects">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
-              Explore Profile
+              Explore Projects
             </Button>
           </Link>
-          <Link href="/contact">
-            <Button size="lg" variant="outline" className="border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-medium px-8">
-              ✉️ Transmit Message
+          <Link href="/about">
+            <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
+              Researcher Bio
             </Button>
           </Link>
         </div>
