@@ -11,9 +11,9 @@ export default function Home() {
       icon: "🛡️"
     },
     {
-      title: "Cloud Database Ready",
-      desc: "PostgreSQL & Prisma ORM integrated jo zero latency aur auto-scaling provide karta hai.",
-      icon: "🗄️"
+      title: "Live Forensics Tools",
+      desc: "Interactive Shannon Entropy mathematical scanner for encrypted anomaly detection.",
+      icon: "🔬"
     },
     {
       title: "Secure Auth & Dashboard",
@@ -34,6 +34,11 @@ export default function Home() {
             <Link href="/about">
               <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
                 About Me
+              </Button>
+            </Link>
+            <Link href="/tools/entropy">
+              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400">
+                Entropy Tool
               </Button>
             </Link>
             <Link href="/login">
@@ -70,9 +75,9 @@ export default function Home() {
               Explore Profile
             </Button>
           </Link>
-          <Link href="/dashboard">
-            <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
-              Launch Dashboard
+          <Link href="/tools/entropy">
+            <Button size="lg" variant="outline" className="border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-medium px-8">
+              🔬 Test Entropy Tool
             </Button>
           </Link>
         </div>
