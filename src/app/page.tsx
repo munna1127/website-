@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Terminal from "@/components/Terminal";
 
 export default function Home() {
   const features = [
@@ -50,7 +51,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
+      <section className="max-w-5xl mx-auto px-6 pt-20 pb-12 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold mb-6">
           ✨ Security Researcher & Systems Automation Engineer
         </div>
@@ -60,10 +61,10 @@ export default function Home() {
             Software & Defense Systems
           </span>
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
           Problem-driven backend architecture, protocol research, and cloud automation built entirely via mobile POSIX subsystems.
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4 mb-14">
           <Link href="/about">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
               Explore Profile
@@ -74,6 +75,11 @@ export default function Home() {
               Launch Dashboard
             </Button>
           </Link>
+        </div>
+
+        {/* Interactive POSIX Shell */}
+        <div className="mt-4">
+          <Terminal />
         </div>
       </section>
 
