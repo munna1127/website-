@@ -16,8 +16,8 @@ export default function Home() {
       icon: "📂"
     },
     {
-      title: "Secure Auth & Dashboard",
-      desc: "Password-protected live CRUD management panel direct database sync ke sath.",
+      title: "Live Telemetry & Diagnostics",
+      desc: "Real-time PostgreSQL round-trip latency and edge server health monitoring.",
       icon: "⚡"
     }
   ];
@@ -32,27 +32,32 @@ export default function Home() {
           </span>
           <nav className="flex items-center gap-2 sm:gap-3">
             <Link href="/projects">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
                 Projects
               </Button>
             </Link>
             <Link href="/about">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
                 About
               </Button>
             </Link>
             <Link href="/tools/entropy">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
                 Tools
               </Button>
             </Link>
+            <Link href="/status">
+              <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300 hover:bg-slate-900 text-xs sm:text-sm">
+                ● Status
+              </Button>
+            </Link>
             <Link href="/contact">
-              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400">
+              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400 text-xs sm:text-sm">
                 Contact
               </Button>
             </Link>
             <Link href="/dashboard">
-              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
+              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 text-xs sm:text-sm">
                 Dashboard
               </Button>
             </Link>
@@ -80,9 +85,9 @@ export default function Home() {
               Explore Projects
             </Button>
           </Link>
-          <Link href="/about">
-            <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
-              Researcher Bio
+          <Link href="/status">
+            <Button size="lg" variant="outline" className="border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 font-medium px-8">
+              ● Live Status Ping
             </Button>
           </Link>
         </div>
