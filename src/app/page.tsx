@@ -33,9 +33,11 @@ export default function Home() {
             <Link href="/api/users" target="_blank" className="text-sm font-medium text-slate-400 hover:text-white transition">
               API Status
             </Link>
-            <Button asChild size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
-              <Link href="#features">Get Started</Link>
-            </Button>
+            <Link href="#features">
+              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
+                Get Started
+              </Button>
+            </Link>
           </nav>
         </div>
       </header>
