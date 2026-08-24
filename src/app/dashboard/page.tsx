@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,6 +18,8 @@ export default function DashboardPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("user");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -48,12 +50,13 @@ export default function DashboardPage() {
       const res = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email }),
+        body: JSON.stringify({ name, email, role }),
       });
       const data = await res.json();
       if (data.success) {
         setName("");
         setEmail("");
+        setRole("user");
         fetchUsers();
       }
     } catch (err) {
@@ -72,37 +75,95 @@ export default function DashboardPage() {
     }
   };
 
+  // Real-time search filter
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      const q = searchQuery.toLowerCase();
+      return (
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        u.email.toLowerCase().includes(q) ||
+        u.role.toLowerCase().includes(q)
+      );
+    });
+  }, [users, searchQuery]);
+
+  // Analytics Calculation
+  const adminCount = users.filter((u) => u.role === "admin").length;
+  const userCount = users.filter((u) => u.role === "user").length;
+
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-12 selection:bg-indigo-500 selection:text-white">
-      <div className="max-w-5xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-6">
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-8 md:p-12 selection:bg-indigo-500 selection:text-white">
+      <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* Top Navigation */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Admin & Data Panel</h1>
-            <p className="text-slate-400 text-sm mt-1">Live PostgreSQL Database Manager</p>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+              ⚡ Admin Central
+            </h1>
+            <p className="text-slate-400 text-sm mt-1">Live Database Metrics & Management Hub</p>
           </div>
-          <Link href="/">
-            <Button variant="outline" size="sm" className="border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200">
-              ← Back to Home
+          <div className="flex items-center gap-3">
+            <Button onClick={fetchUsers} variant="outline" size="sm" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300">
+              ↻ Refresh Sync
             </Button>
-          </Link>
+            <Link href="/">
+              <Button variant="outline" size="sm" className="border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200">
+                ← Home
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Real-time KPI Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-slate-900/60 border-slate-800 backdrop-blur">
+            <CardHeader className="p-4 pb-2">
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Database Records</CardDescription>
+              <CardTitle className="text-2xl font-bold text-white mt-1">{users.length}</CardTitle>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-slate-900/60 border-slate-800 backdrop-blur">
+            <CardHeader className="p-4 pb-2">
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Admin Accounts</CardDescription>
+              <CardTitle className="text-2xl font-bold text-indigo-400 mt-1">{adminCount}</CardTitle>
+            </CardHeader>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800 backdrop-blur">
+            <CardHeader className="p-4 pb-2">
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Standard Users</CardDescription>
+              <CardTitle className="text-2xl font-bold text-emerald-400 mt-1">{userCount}</CardTitle>
+            </CardHeader>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800 backdrop-blur">
+            <CardHeader className="p-4 pb-2">
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Engine Status</CardDescription>
+              <CardTitle className="text-2xl font-bold text-teal-400 mt-1 flex items-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+                Connected
+              </CardTitle>
+            </CardHeader>
+          </Card>
         </div>
 
         {/* Create Record Form */}
-        <Card className="bg-slate-900/60 border-slate-800 shadow-xl">
+        <Card className="bg-slate-900/60 border-slate-800 shadow-2xl">
           <CardHeader>
             <CardTitle className="text-lg text-white">Create New Entry</CardTitle>
             <CardDescription className="text-slate-400 text-sm">
-              Live database me naya record insert karo.
+              Live PostgreSQL database me record add karo.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleAddUser} className="flex flex-col md:flex-row gap-4">
+            <form onSubmit={handleAddUser} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Input
                 placeholder="Full Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-slate-950 border-slate-700 text-white placeholder:text-slate-500"
+                className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 focus:border-indigo-500"
               />
               <Input
                 type="email"
@@ -110,60 +171,89 @@ export default function DashboardPage() {
                 placeholder="Email Address *"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-slate-950 border-slate-700 text-white placeholder:text-slate-500"
+                className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 focus:border-indigo-500"
               />
-              <Button type="submit" disabled={loading} className="bg-indigo-600 hover:bg-indigo-500 text-white px-8 whitespace-nowrap">
-                {loading ? "Adding..." : "Add Record"}
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="h-9 px-3 rounded-md bg-slate-950 border border-slate-800 text-slate-200 text-sm focus:outline-none focus:border-indigo-500"
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+              </select>
+              <Button type="submit" disabled={loading} className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-600/20">
+                {loading ? "Adding..." : "+ Add Entry"}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        {/* Records Table */}
-        <Card className="bg-slate-900/60 border-slate-800 shadow-xl overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between">
+        {/* Database Records Table with Live Search */}
+        <Card className="bg-slate-900/60 border-slate-800 shadow-2xl overflow-hidden">
+          <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-lg text-white">Database Records</CardTitle>
+              <CardTitle className="text-lg text-white">All Records</CardTitle>
               <CardDescription className="text-slate-400 text-sm">
-                Total entries: {users.length}
+                Showing {filteredUsers.length} of {users.length} entries
               </CardDescription>
             </div>
-            <Button onClick={fetchUsers} size="sm" variant="outline" className="border-slate-700 text-xs text-slate-300">
-              ↻ Refresh
-            </Button>
+            
+            {/* Live Search Input */}
+            <div className="w-full sm:w-72">
+              <Input
+                placeholder="🔍 Search by name, email, role..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-slate-950 border-slate-800 text-white text-sm placeholder:text-slate-500"
+              />
+            </div>
           </CardHeader>
-          <CardContent>
+          
+          <CardContent className="p-0">
             {fetching ? (
-              <p className="text-center py-8 text-slate-500 text-sm">Fetching live database...</p>
-            ) : users.length === 0 ? (
-              <p className="text-center py-8 text-slate-500 text-sm">No records found. Add your first record above!</p>
+              <div className="p-8 text-center text-slate-500 text-sm">Fetching live cloud records...</div>
+            ) : filteredUsers.length === 0 ? (
+              <div className="p-8 text-center text-slate-500 text-sm">
+                {searchQuery ? "No matching records found for your search." : "No records yet. Add one using the form above."}
+              </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400">
-                      <th className="py-3 px-4 font-medium">Name</th>
-                      <th className="py-3 px-4 font-medium">Email</th>
-                      <th className="py-3 px-4 font-medium">Role</th>
-                      <th className="py-3 px-4 font-medium text-right">Actions</th>
+                    <tr className="border-b border-slate-800/80 bg-slate-950/40 text-slate-400">
+                      <th className="py-3.5 px-6 font-semibold">User</th>
+                      <th className="py-3.5 px-6 font-semibold">Email</th>
+                      <th className="py-3.5 px-6 font-semibold">Role</th>
+                      <th className="py-3.5 px-6 font-semibold">Created</th>
+                      <th className="py-3.5 px-6 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {users.map((u) => (
+                  <tbody className="divide-y divide-slate-800/50">
+                    {filteredUsers.map((u) => (
                       <tr key={u.id} className="hover:bg-slate-800/30 transition">
-                        <td className="py-3 px-4 font-medium text-white">{u.name || "N/A"}</td>
-                        <td className="py-3 px-4 text-slate-300">{u.email}</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 text-xs rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                            {u.role}
+                        <td className="py-3.5 px-6 font-medium text-white">{u.name || "Anonymous"}</td>
+                        <td className="py-3.5 px-6 text-slate-300 font-mono text-xs">{u.email}</td>
+                        <td className="py-3.5 px-6">
+                          <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border ${
+                            u.role === "admin"
+                              ? "bg-purple-500/10 text-purple-400 border-purple-500/30"
+                              : u.role === "editor"
+                              ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                              : "bg-indigo-500/10 text-indigo-400 border-indigo-500/30"
+                          }`}>
+                            {u.role.toUpperCase()}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-right">
+                        <td className="py-3.5 px-6 text-slate-400 text-xs">
+                          {new Date(u.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-3.5 px-6 text-right">
                           <Button
                             onClick={() => handleDelete(u.id)}
                             size="sm"
                             variant="destructive"
-                            className="text-xs bg-red-600/80 hover:bg-red-600"
+                            className="text-xs bg-red-600/80 hover:bg-red-600 px-3 py-1 h-8"
                           >
                             Delete
                           </Button>
