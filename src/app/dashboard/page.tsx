@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,6 +25,7 @@ interface MessageItem {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<UserItem[]>([]);
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [name, setName] = useState("");
@@ -55,6 +57,15 @@ export default function DashboardPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +108,23 @@ export default function DashboardPage() {
     }
   };
 
+  const exportCSV = () => {
+    if (messages.length === 0) return alert("No messages to export!");
+    const headers = ["ID,Name,Contact,Subject,Message,CreatedAt"];
+    const rows = messages.map(
+      (m) =>
+        `"${m.id}","${m.name}","${m.contact}","${m.subject}","${m.message.replace(/"/g, '""')}","${m.createdAt}"`
+    );
+    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `messages_export_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const filteredUsers = useMemo(() => {
     return users.filter((u) => {
       const q = searchQuery.toLowerCase();
@@ -115,18 +143,26 @@ export default function DashboardPage() {
         {/* Top Navigation */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">⚡ Admin Central</h1>
-            <p className="text-slate-400 text-sm mt-1">Live Database Metrics & Inbox</p>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              ⚡ Admin Central
+            </h1>
+            <p className="text-slate-400 text-sm mt-1">Live Database Metrics & Protected Inbox</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <Button onClick={fetchData} variant="outline" size="sm" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300">
               ↻ Refresh Sync
             </Button>
+            <Button onClick={exportCSV} variant="outline" size="sm" className="border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300">
+              📥 Export CSV
+            </Button>
             <Link href="/">
               <Button variant="outline" size="sm" className="border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200">
-                ← Home
+                Home
               </Button>
             </Link>
+            <Button onClick={handleLogout} variant="destructive" size="sm" className="bg-red-600/80 hover:bg-red-600">
+              Logout
+            </Button>
           </div>
         </div>
 
@@ -141,14 +177,14 @@ export default function DashboardPage() {
           
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader className="p-4 pb-2">
-              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Incoming Messages</CardDescription>
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Incoming Transmissions</CardDescription>
               <CardTitle className="text-2xl font-bold text-indigo-400 mt-1">{messages.length}</CardTitle>
             </CardHeader>
           </Card>
 
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader className="p-4 pb-2">
-              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Admins / Staff</CardDescription>
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Admin Accounts</CardDescription>
               <CardTitle className="text-2xl font-bold text-emerald-400 mt-1">
                 {users.filter((u) => u.role === "admin").length}
               </CardTitle>
@@ -157,24 +193,29 @@ export default function DashboardPage() {
 
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader className="p-4 pb-2">
-              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Engine Status</CardDescription>
+              <CardDescription className="text-slate-400 text-xs font-semibold uppercase">Session Status</CardDescription>
               <CardTitle className="text-2xl font-bold text-teal-400 mt-1 flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-teal-400 animate-pulse"></span>
-                Connected
+                Authorized
               </CardTitle>
             </CardHeader>
           </Card>
         </div>
 
-        {/* Inbox Section (Incoming Transmissions) */}
+        {/* Inbox Section */}
         <Card className="bg-slate-900/60 border-indigo-500/30 shadow-2xl overflow-hidden">
-          <CardHeader className="border-b border-slate-800/60 bg-indigo-950/20">
-            <CardTitle className="text-lg text-white flex items-center gap-2">
-              📬 Contact Transmissions ({messages.length})
-            </CardTitle>
-            <CardDescription className="text-slate-400 text-xs">
-              Live contact form se aane wale messages direct database se fetch ho rahe hain.
-            </CardDescription>
+          <CardHeader className="border-b border-slate-800/60 bg-indigo-950/20 flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg text-white flex items-center gap-2">
+                📬 Contact Transmissions ({messages.length})
+              </CardTitle>
+              <CardDescription className="text-slate-400 text-xs">
+                Real-time synchronized transmission data stored in Neon PostgreSQL.
+              </CardDescription>
+            </div>
+            <Button onClick={exportCSV} size="sm" variant="outline" className="text-xs border-indigo-500/30 text-indigo-300">
+              Download CSV
+            </Button>
           </CardHeader>
           <CardContent className="p-0">
             {messages.length === 0 ? (
