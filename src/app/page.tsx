@@ -37,13 +37,13 @@ export default function Home() {
               </Button>
             </Link>
             <Link href="/tools/entropy">
-              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400">
-                Entropy Tool
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+                Tools
               </Button>
             </Link>
-            <Link href="/login">
-              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300">
-                Sign In
+            <Link href="/contact">
+              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400">
+                Contact
               </Button>
             </Link>
             <Link href="/dashboard">
@@ -75,9 +75,9 @@ export default function Home() {
               Explore Profile
             </Button>
           </Link>
-          <Link href="/tools/entropy">
+          <Link href="/contact">
             <Button size="lg" variant="outline" className="border-indigo-500/40 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 font-medium px-8">
-              🔬 Test Entropy Tool
+              ✉️ Transmit Message
             </Button>
           </Link>
         </div>
