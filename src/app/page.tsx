@@ -15,9 +15,9 @@ export default function Home() {
       icon: "🗄️"
     },
     {
-      title: "Interactive Dashboard",
-      desc: "Live CRUD management panel direct database sync ke sath.",
-      icon: "📊"
+      title: "Secure Auth & Dashboard",
+      desc: "Password-protected live CRUD management panel direct database sync ke sath.",
+      icon: "🔒"
     }
   ];
 
@@ -29,10 +29,15 @@ export default function Home() {
           <span className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
             🚀 MyPlatform
           </span>
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-3">
+            <Link href="/login">
+              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300">
+                Sign In
+              </Button>
+            </Link>
             <Link href="/dashboard">
               <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
-                Open Dashboard
+                Dashboard
               </Button>
             </Link>
           </nav>
@@ -51,17 +56,19 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          Production-ready architecture jisme authentication, live PostgreSQL database manager, aur dynamic dashboard integrated hain.
+          Production-ready architecture jisme secure login, live PostgreSQL database manager, aur dynamic dashboard integrated hain.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/dashboard">
+          <Link href="/login">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
+              Secure Sign In
+            </Button>
+          </Link>
+          <Link href="/dashboard">
+            <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
               Launch Dashboard
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200">
-            Documentation
-          </Button>
         </div>
       </section>
 
