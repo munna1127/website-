@@ -5,9 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function Home() {
   const features = [
     {
-      title: "Fullstack Architecture",
-      desc: "Next.js App Router ke sath server actions aur scalable modular structure.",
-      icon: "⚡"
+      title: "Security & Systems Engineering",
+      desc: "Built entirely in Termux POSIX sandbox with zero laptop dependency.",
+      icon: "🛡️"
     },
     {
       title: "Cloud Database Ready",
@@ -17,7 +17,7 @@ export default function Home() {
     {
       title: "Secure Auth & Dashboard",
       desc: "Password-protected live CRUD management panel direct database sync ke sath.",
-      icon: "🔒"
+      icon: "⚡"
     }
   ];
 
@@ -27,9 +27,14 @@ export default function Home() {
       <header className="border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-50 bg-slate-950/70">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <span className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
-            🚀 MyPlatform
+            🚀 Aryan Tomar
           </span>
           <nav className="flex items-center gap-3">
+            <Link href="/about">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900">
+                About Me
+              </Button>
+            </Link>
             <Link href="/login">
               <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300">
                 Sign In
@@ -47,21 +52,21 @@ export default function Home() {
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold mb-6">
-          ✨ Next.js + Tailwind + PostgreSQL Live
+          ✨ Security Researcher & Systems Automation Engineer
         </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-          Next-Gen Modular <br className="hidden sm:block" />
+          Engineering Resilient <br className="hidden sm:block" />
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Web Application Platform
+            Software & Defense Systems
           </span>
         </h1>
         <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-          Production-ready architecture jisme secure login, live PostgreSQL database manager, aur dynamic dashboard integrated hain.
+          Problem-driven backend architecture, protocol research, and cloud automation built entirely via mobile POSIX subsystems.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/login">
+          <Link href="/about">
             <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
-              Secure Sign In
+              Explore Profile
             </Button>
           </Link>
           <Link href="/dashboard">
@@ -91,7 +96,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 py-8 text-center text-sm text-slate-500">
-        <p>© 2026 MyPlatform. Built with Next.js & Vercel.</p>
+        <p>© 2026 Aryan Tomar. Built with Next.js, TypeScript & Vercel.</p>
       </footer>
     </main>
   );
