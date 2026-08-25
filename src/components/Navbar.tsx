@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
     { name: "Hash", href: "/tools/hash" },
+    { name: "Encoder", href: "/tools/encoder" },
     { name: "Status", href: "/status", isStatus: true },
     { name: "Contact", href: "/contact" },
   ];
@@ -27,7 +28,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden md:flex items-center gap-1 sm:gap-1.5">
+        <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -50,7 +51,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile View */}
+        {/* Mobile Actions */}
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/dashboard"
