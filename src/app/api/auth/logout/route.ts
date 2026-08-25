@@ -1,9 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST() {
-  const response = NextResponse.json({ success: true, message: "Logged out" });
-  response.cookies.delete("auth_session");
-  return response;
+  const cookieStore = await cookies();
+  cookieStore.delete("auth_session");
+  return NextResponse.json({ success: true, message: "Logged out successfully" });
 }

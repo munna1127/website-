@@ -26,6 +26,7 @@ interface MessageItem {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [name, setName] = useState("");
@@ -42,13 +43,23 @@ export default function DashboardPage() {
         fetch("/api/users"),
         fetch("/api/contact"),
       ]);
+
+      // If unauthorized, kick directly to /login
+      if (userRes.status === 401 || msgRes.status === 401) {
+        setIsAuthenticated(false);
+        router.replace("/login");
+        return;
+      }
+
       const userData = await userRes.json();
       const msgData = await msgRes.json();
 
       if (userData.success) setUsers(userData.users);
       if (msgData.success) setMessages(msgData.messages);
+      setIsAuthenticated(true);
     } catch (err) {
       console.error(err);
+      router.replace("/login");
     } finally {
       setFetching(false);
     }
@@ -61,7 +72,7 @@ export default function DashboardPage() {
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/login");
+      router.replace("/login");
     } catch (err) {
       console.error(err);
     }
@@ -136,11 +147,20 @@ export default function DashboardPage() {
     });
   }, [users, searchQuery]);
 
+  if (fetching && !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400 space-y-3">
+        <div className="h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-xs font-mono">Verifying authorization credentials...</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-8 md:p-12 selection:bg-indigo-500 selection:text-white">
       <div className="max-w-6xl mx-auto space-y-8">
         
-        {/* Top Navigation */}
+        {/* Top Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
@@ -166,7 +186,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Real-time KPI Stats Grid */}
+        {/* Real-time KPI Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader className="p-4 pb-2">
@@ -202,7 +222,7 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        {/* Inbox Section */}
+        {/* Protected Transmissions Inbox */}
         <Card className="bg-slate-900/60 border-indigo-500/30 shadow-2xl overflow-hidden">
           <CardHeader className="border-b border-slate-800/60 bg-indigo-950/20 flex flex-row items-center justify-between">
             <div>
