@@ -22,8 +22,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-50">
+      {/* Navbar */}
+      <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="font-bold text-base sm:text-lg text-white flex items-center gap-2">
             🚀 Aryan Tomar
@@ -38,6 +38,9 @@ export default function Home() {
             <Link href="/status" className="text-xs sm:text-sm text-emerald-400 hover:text-emerald-300 px-2 py-1">
               ● Status
             </Link>
+            <Link href="/contact" className="text-xs sm:text-sm text-indigo-400 hover:text-indigo-300 px-2 py-1">
+              Contact
+            </Link>
             <Link href="/dashboard" className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-md font-medium shadow-md shadow-indigo-500/20">
               Dashboard
             </Link>
@@ -45,14 +48,17 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero Section */}
       <main className="max-w-5xl mx-auto px-4 py-12 text-center w-full space-y-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold">
           ✨ Security Researcher & Systems Automation Engineer
         </div>
         
         <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-          Engineering Resilient Software & Defense Systems
+          Engineering Resilient <br className="hidden sm:block" />
+          <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Software & Defense Systems
+          </span>
         </h1>
         
         <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
