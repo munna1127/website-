@@ -19,16 +19,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("portfolio_theme") as UITheme;
-    if (saved && ["cyber", "matrix", "crimson"].includes(saved)) {
-      setThemeState(saved);
-      document.documentElement.setAttribute("data-theme", saved);
-    }
+    const initial = saved && ["cyber", "matrix", "crimson"].includes(saved) ? saved : "cyber";
+    setThemeState(initial);
+    document.documentElement.setAttribute("data-theme", initial);
+    document.body.setAttribute("data-theme", initial);
   }, []);
 
   const setTheme = (newTheme: UITheme) => {
     setThemeState(newTheme);
     localStorage.setItem("portfolio_theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
+    document.body.setAttribute("data-theme", newTheme);
   };
 
   return (

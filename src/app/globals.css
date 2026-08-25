@@ -1,30 +1,128 @@
 @import "tailwindcss";
 
-:root, [data-theme="cyber"] {
-  --bg-primary: #020617;
-  --bg-card: rgba(15, 23, 42, 0.65);
-  --border-glow: rgba(99, 102, 241, 0.3);
-  --accent-color: #818cf8;
-  --accent-btn: #4f46e5;
+/* -------------------------------------------------------------
+   THEME 1: CYBER SOC (Default Indigo & Violet)
+------------------------------------------------------------- */
+[data-theme="cyber"], :root {
+  --theme-bg: #020617;
+  --theme-card: #0f172a;
+  --theme-border: #1e293b;
+  --theme-accent: #6366f1;
+  --theme-accent-hover: #4f46e5;
+  --theme-text-accent: #818cf8;
 }
 
+/* -------------------------------------------------------------
+   THEME 2: MATRIX TERMINAL (Phosphor Emerald Green)
+------------------------------------------------------------- */
 [data-theme="matrix"] {
-  --bg-primary: #000803;
-  --bg-card: rgba(2, 28, 12, 0.7);
-  --border-glow: rgba(16, 185, 129, 0.35);
-  --accent-color: #34d399;
-  --accent-btn: #059669;
+  --theme-bg: #010d05;
+  --theme-card: #031c0b;
+  --theme-border: #0a3818;
+  --theme-accent: #059669;
+  --theme-accent-hover: #10b981;
+  --theme-text-accent: #34d399;
 }
 
+[data-theme="matrix"] body,
+[data-theme="matrix"] .bg-slate-950,
+[data-theme="matrix"] .bg-slate-950\/90,
+[data-theme="matrix"] .bg-slate-950\/98 {
+  background-color: #010d05 !important;
+}
+
+[data-theme="matrix"] .bg-slate-900,
+[data-theme="matrix"] .bg-slate-900\/60,
+[data-theme="matrix"] .bg-slate-900\/80 {
+  background-color: #031c0b !important;
+}
+
+[data-theme="matrix"] .border-slate-800,
+[data-theme="matrix"] .border-slate-800\/80,
+[data-theme="matrix"] .border-slate-800\/60 {
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+[data-theme="matrix"] .bg-indigo-600,
+[data-theme="matrix"] .bg-indigo-600\/80 {
+  background-color: #059669 !important;
+}
+
+[data-theme="matrix"] .bg-indigo-600:hover {
+  background-color: #10b981 !important;
+}
+
+[data-theme="matrix"] .text-indigo-400,
+[data-theme="matrix"] .text-indigo-300 {
+  color: #34d399 !important;
+}
+
+[data-theme="matrix"] .border-indigo-500,
+[data-theme="matrix"] .border-indigo-500\/30,
+[data-theme="matrix"] .border-indigo-500\/40 {
+  border-color: rgba(52, 211, 153, 0.4) !important;
+}
+
+[data-theme="matrix"] .bg-indigo-500\/10 {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* -------------------------------------------------------------
+   THEME 3: CRIMSON BLACK OPS (Tactical Military Red)
+------------------------------------------------------------- */
 [data-theme="crimson"] {
-  --bg-primary: #080203;
-  --bg-card: rgba(28, 3, 7, 0.7);
-  --border-glow: rgba(244, 63, 94, 0.35);
-  --accent-color: #fb7185;
-  --accent-btn: #e11d48;
+  --theme-bg: #0c0204;
+  --theme-card: #1f050a;
+  --theme-border: #3d0a14;
+  --theme-accent: #e11d48;
+  --theme-accent-hover: #f43f5e;
+  --theme-text-accent: #fb7185;
 }
 
-body {
-  background-color: var(--bg-primary);
-  transition: background-color 0.3s ease;
+[data-theme="crimson"] body,
+[data-theme="crimson"] .bg-slate-950,
+[data-theme="crimson"] .bg-slate-950\/90,
+[data-theme="crimson"] .bg-slate-950\/98 {
+  background-color: #0c0204 !important;
+}
+
+[data-theme="crimson"] .bg-slate-900,
+[data-theme="crimson"] .bg-slate-900\/60,
+[data-theme="crimson"] .bg-slate-900\/80 {
+  background-color: #1f050a !important;
+}
+
+[data-theme="crimson"] .border-slate-800,
+[data-theme="crimson"] .border-slate-800\/80,
+[data-theme="crimson"] .border-slate-800\/60 {
+  border-color: rgba(244, 63, 94, 0.25) !important;
+}
+
+[data-theme="crimson"] .bg-indigo-600,
+[data-theme="crimson"] .bg-indigo-600\/80 {
+  background-color: #e11d48 !important;
+}
+
+[data-theme="crimson"] .bg-indigo-600:hover {
+  background-color: #f43f5e !important;
+}
+
+[data-theme="crimson"] .text-indigo-400,
+[data-theme="crimson"] .text-indigo-300 {
+  color: #fb7185 !important;
+}
+
+[data-theme="crimson"] .border-indigo-500,
+[data-theme="crimson"] .border-indigo-500\/30,
+[data-theme="crimson"] .border-indigo-500\/40 {
+  border-color: rgba(251, 113, 133, 0.4) !important;
+}
+
+[data-theme="crimson"] .bg-indigo-500\/10 {
+  background-color: rgba(225, 29, 72, 0.15) !important;
+}
+
+/* Base Global Transitions */
+body, div, header, main, card, button {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
