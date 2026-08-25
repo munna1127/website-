@@ -23,41 +23,43 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-      {/* Navbar */}
-      <header className="border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-50 bg-slate-950/70">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="font-bold text-xl tracking-tight text-white flex items-center gap-2">
+    <main className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+      {/* Mobile-Optimized Responsive Navbar */}
+      <header className="border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-50 bg-slate-950/80 w-full">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+          <Link href="/" className="font-bold text-base sm:text-xl tracking-tight text-white whitespace-nowrap flex items-center gap-1.5 shrink-0">
             🚀 Aryan Tomar
-          </span>
-          <nav className="flex items-center gap-2 sm:gap-3">
-            <Link href="/projects">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
+          </Link>
+          
+          {/* Scrollable nav menu for smaller mobile screens */}
+          <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar py-1">
+            <Link href="/projects" className="shrink-0">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white text-xs px-2 sm:px-3 h-8">
                 Projects
               </Button>
             </Link>
-            <Link href="/about">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
+            <Link href="/about" className="shrink-0">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white text-xs px-2 sm:px-3 h-8">
                 About
               </Button>
             </Link>
-            <Link href="/tools/entropy">
-              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 text-xs sm:text-sm">
+            <Link href="/tools/entropy" className="shrink-0">
+              <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white text-xs px-2 sm:px-3 h-8">
                 Tools
               </Button>
             </Link>
-            <Link href="/status">
-              <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300 hover:bg-slate-900 text-xs sm:text-sm">
+            <Link href="/status" className="shrink-0">
+              <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300 text-xs px-2 sm:px-3 h-8">
                 ● Status
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 hover:bg-slate-800 text-indigo-400 text-xs sm:text-sm">
+            <Link href="/contact" className="shrink-0">
+              <Button size="sm" variant="outline" className="border-slate-800 bg-slate-900 text-indigo-400 text-xs px-2.5 sm:px-3 h-8">
                 Contact
               </Button>
             </Link>
-            <Link href="/dashboard">
-              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 text-xs sm:text-sm">
+            <Link href="/dashboard" className="shrink-0">
+              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 h-8 shadow-md shadow-indigo-500/20">
                 Dashboard
               </Button>
             </Link>
@@ -66,40 +68,40 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="max-w-5xl mx-auto px-6 pt-20 pb-12 text-center">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-12 text-center w-full">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold mb-6">
           ✨ Security Researcher & Systems Automation Engineer
         </div>
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
           Engineering Resilient <br className="hidden sm:block" />
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Software & Defense Systems
           </span>
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+        <p className="text-slate-400 text-sm sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
           Problem-driven backend architecture, protocol research, and cloud automation built entirely via mobile POSIX subsystems.
         </p>
-        <div className="flex flex-wrap justify-center gap-4 mb-14">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
           <Link href="/projects">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-8 shadow-xl shadow-indigo-600/25">
+            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 sm:px-8 text-sm sm:text-base shadow-xl shadow-indigo-600/25">
               Explore Projects
             </Button>
           </Link>
           <Link href="/status">
-            <Button size="lg" variant="outline" className="border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 font-medium px-8">
+            <Button size="lg" variant="outline" className="border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 font-medium px-6 sm:px-8 text-sm sm:text-base">
               ● Live Status Ping
             </Button>
           </Link>
         </div>
 
         {/* Interactive POSIX Shell */}
-        <div className="mt-4">
+        <div className="mt-4 w-full">
           <Terminal />
         </div>
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="max-w-6xl mx-auto px-6 py-16 w-full">
+      <section id="features" className="max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((feat, idx) => (
             <Card key={idx} className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition duration-300">
@@ -116,7 +118,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 py-8 text-center text-sm text-slate-500">
+      <footer className="border-t border-slate-800/80 py-8 text-center text-xs sm:text-sm text-slate-500 w-full">
         <p>© 2026 Aryan Tomar. Built with Next.js, TypeScript & Vercel.</p>
       </footer>
     </main>
