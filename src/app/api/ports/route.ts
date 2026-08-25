@@ -80,7 +80,7 @@ export async function POST(req: Request) {
 
     const startTime = Date.now();
     
-    // Run parallel TCP checks on common ports
+    // Parallel TCP connect probes
     const scanPromises = COMMON_PORTS.map((p) => checkPort(host, p.port));
     const results = await Promise.all(scanPromises);
 
@@ -90,7 +90,7 @@ export async function POST(req: Request) {
       success: true,
       target: host,
       totalExecutionMs: Date.now() - startTime,
-      ports Scanned: COMMON_PORTS.length,
+      portsScanned: COMMON_PORTS.length,
       results,
       openCount: openPorts.length,
     });
