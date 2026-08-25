@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
     { name: "WAF", href: "/tools/waf" },
+    { name: "IOC", href: "/tools/ioc" },
     { name: "Subnet", href: "/tools/subnet" },
     { name: "Hash", href: "/tools/hash" },
     { name: "Encoder", href: "/tools/encoder" },
@@ -30,12 +31,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className={`px-2 py-1 rounded-md text-xs font-medium transition ${
+              className={`px-2 py-1.5 rounded-lg text-xs font-medium transition ${
                 link.isStatus
                   ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
@@ -53,8 +54,8 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile View */}
-        <div className="flex lg:hidden items-center gap-2">
+        {/* Mobile & Tablet Actions */}
+        <div className="flex xl:hidden items-center gap-2">
           <Link
             href="/dashboard"
             className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-2.5 py-1.5 rounded-md shadow-sm"
@@ -82,15 +83,15 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden border-b border-slate-800 bg-slate-950/98 px-4 py-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="xl:hidden border-b border-slate-800 bg-slate-950/98 px-4 py-4 grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className={`block px-3 py-2 rounded-md text-sm font-medium transition ${
+              className={`block px-3 py-2 rounded-md text-xs font-medium transition ${
                 link.isStatus
-                  ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20"
+                  ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 col-span-2 text-center"
                   : "text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent"
               }`}
             >
