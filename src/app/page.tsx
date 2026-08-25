@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Terminal from "@/components/Terminal";
 
 export default function Home() {
@@ -24,32 +22,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-      {/* Clean Mobile-Friendly Header */}
+      {/* Header */}
       <header className="border-b border-slate-800/80 sticky top-0 z-50 bg-slate-950/90 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
           <Link href="/" className="font-bold text-base sm:text-lg text-white flex items-center gap-1.5 shrink-0">
             🚀 Aryan Tomar
           </Link>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <Link href="/projects">
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white text-xs px-2 sm:px-3 h-8">
-                Projects
-              </Button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/projects" className="text-xs sm:text-sm text-slate-300 hover:text-white transition px-2 py-1">
+              Projects
             </Link>
-            <Link href="/about">
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white text-xs px-2 sm:px-3 h-8">
-                About
-              </Button>
+            <Link href="/about" className="text-xs sm:text-sm text-slate-300 hover:text-white transition px-2 py-1">
+              About
             </Link>
-            <Link href="/status">
-              <Button variant="ghost" size="sm" className="text-emerald-400 hover:text-emerald-300 text-xs px-2 sm:px-3 h-8">
-                ● Status
-              </Button>
+            <Link href="/tools/entropy" className="text-xs sm:text-sm text-slate-300 hover:text-white transition px-2 py-1">
+              Tools
             </Link>
-            <Link href="/dashboard">
-              <Button size="sm" className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 sm:px-3 h-8 shadow-sm">
-                Dashboard
-              </Button>
+            <Link href="/status" className="text-xs sm:text-sm text-emerald-400 hover:text-emerald-300 transition px-2 py-1">
+              ● Status
+            </Link>
+            <Link href="/contact" className="text-xs sm:text-sm text-indigo-400 hover:text-indigo-300 transition px-2 py-1">
+              Contact
+            </Link>
+            <Link href="/dashboard" className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-md font-medium transition shadow-md shadow-indigo-500/20">
+              Dashboard
             </Link>
           </div>
         </div>
@@ -73,35 +69,29 @@ export default function Home() {
         </p>
         
         <div className="flex flex-wrap justify-center gap-3">
-          <Link href="/projects">
-            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 text-sm">
-              Explore Projects
-            </Button>
+          <Link href="/projects" className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-2.5 rounded-lg text-sm shadow-xl shadow-indigo-600/25 transition">
+            Explore Projects
           </Link>
-          <Link href="/contact">
-            <Button size="lg" variant="outline" className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200 px-6 text-sm">
-              ✉️ Contact
-            </Button>
+          <Link href="/contact" className="border border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200 px-6 py-2.5 rounded-lg text-sm transition">
+            ✉️ Contact
           </Link>
         </div>
 
-        {/* Terminal Wrapper */}
+        {/* Terminal Component */}
         <div className="pt-4 text-left">
           <Terminal />
         </div>
 
-        {/* Features */}
+        {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-10 text-left">
           {features.map((feat, idx) => (
-            <Card key={idx} className="bg-slate-900/60 border-slate-800 hover:border-slate-700 transition">
-              <CardHeader className="p-5">
-                <div className="text-2xl mb-2">{feat.icon}</div>
-                <CardTitle className="text-base text-white font-semibold">{feat.title}</CardTitle>
-                <CardDescription className="text-slate-400 text-xs mt-1 leading-relaxed">
-                  {feat.desc}
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <div key={idx} className="bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition p-5 rounded-xl">
+              <div className="text-2xl mb-2">{feat.icon}</div>
+              <h3 className="text-base text-white font-semibold">{feat.title}</h3>
+              <p className="text-slate-400 text-xs mt-1 leading-relaxed">
+                {feat.desc}
+              </p>
+            </div>
           ))}
         </div>
       </main>
