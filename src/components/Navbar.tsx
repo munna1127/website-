@@ -9,6 +9,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Projects", href: "/projects" },
     { name: "About", href: "/about" },
+    { name: "Media", href: "/tools/media" },
     { name: "Ports", href: "/tools/ports" },
     { name: "CVSS", href: "/tools/cvss" },
     { name: "Entropy", href: "/tools/entropy" },
@@ -16,7 +17,6 @@ export default function Navbar() {
     { name: "WAF", href: "/tools/waf" },
     { name: "IOC", href: "/tools/ioc" },
     { name: "Subnet", href: "/tools/subnet" },
-    { name: "Hash", href: "/tools/hash" },
     { name: "Status", href: "/status", isStatus: true },
     { name: "Contact", href: "/contact" },
   ];
