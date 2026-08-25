@@ -11,6 +11,7 @@ export default function Navbar() {
     { name: "About", href: "/about" },
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
+    { name: "Hash", href: "/tools/hash" },
     { name: "Status", href: "/status", isStatus: true },
     { name: "Contact", href: "/contact" },
   ];
@@ -18,8 +19,6 @@ export default function Navbar() {
   return (
     <header className="border-b border-slate-800/80 sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        
-        {/* Brand Logo */}
         <Link href="/" className="font-extrabold text-base sm:text-lg text-white tracking-tight flex items-center gap-2 shrink-0">
           <span>🚀</span>
           <span className="bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent whitespace-nowrap">
@@ -27,13 +26,13 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-1 sm:gap-2">
+        {/* Desktop Links */}
+        <nav className="hidden md:flex items-center gap-1 sm:gap-1.5">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition ${
+              className={`px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition ${
                 link.isStatus
                   ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
@@ -51,7 +50,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile Actions */}
+        {/* Mobile View */}
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/dashboard"
