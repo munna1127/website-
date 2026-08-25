@@ -9,14 +9,14 @@ export async function POST(req: Request) {
     const adminPassword = process.env.ADMIN_PASSWORD || "aryan1127";
 
     if (password === adminPassword) {
-      const cookieStore = cookies();
+      const cookieStore = await cookies();
       cookieStore.set({
         name: "auth_session",
         value: "authenticated_true",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7 days session
+        maxAge: 60 * 60 * 24 * 7, // 7 days
       });
 
       return NextResponse.json({ success: true, message: "Authentication successful" });

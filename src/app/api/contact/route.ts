@@ -45,10 +45,10 @@ async function sendTelegramAlert(name: string, contact: string, subject: string,
   }
 }
 
-// GET: Protected (Only Admin can read inbox)
+// GET: Protected (Only authenticated admin can read)
 export async function GET() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get("auth_session");
     if (!session || session.value !== "authenticated_true") {
       return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 401 });
@@ -62,7 +62,7 @@ export async function GET() {
   }
 }
 
-// POST: Public (Anyone can send contact message)
+// POST: Public
 export async function POST(req: Request) {
   try {
     await ensureTable();
@@ -86,10 +86,10 @@ export async function POST(req: Request) {
   }
 }
 
-// DELETE: Protected (Only Admin can delete messages)
+// DELETE: Protected (Only authenticated admin can delete)
 export async function DELETE(req: Request) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const session = cookieStore.get("auth_session");
     if (!session || session.value !== "authenticated_true") {
       return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 401 });
