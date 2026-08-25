@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import jsPDF from "jspdf";
 
 export default function MediaToolsPage() {
   const [activeTab, setActiveTab] = useState<"img2pdf" | "transcode" | "magicbyte" | "metadata">("img2pdf");
@@ -27,7 +28,7 @@ export default function MediaToolsPage() {
   // Metadata Stripper State
   const [strippedUrl, setStrippedUrl] = useState<string | null>(null);
 
-  // 1. Image to PDF Logic (Client-Side Vector/Raster PDF 1.4 Builder)
+  // 1. Production Image to PDF Generator
   const handlePdfUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -52,83 +53,28 @@ export default function MediaToolsPage() {
     setGeneratingPdf(true);
 
     try {
-      // Build pure client-side PDF document stream
-      let pdfContent = `%PDF-1.4\n`;
-      const objectOffsets: number[] = [];
-      let currentOffset = 0;
+      const firstImg = pdfImages[0];
+      const isLandscape = firstImg.width > firstImg.height;
 
-      const addObject = (content: string) => {
-        objectOffsets.push(pdfContent.length);
-        pdfContent += content + "\n";
-      };
+      // Initialize PDF with exact first image dimensions
+      const doc = new jsPDF({
+        orientation: isLandscape ? "landscape" : "portrait",
+        unit: "px",
+        format: [firstImg.width, firstImg.height],
+      });
 
-      // 1: Catalog
-      addObject(`1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj`);
+      pdfImages.forEach((img, idx) => {
+        const landscape = img.width > img.height;
+        if (idx > 0) {
+          doc.addPage([img.width, img.height], landscape ? "landscape" : "portrait");
+        }
+        doc.addImage(img.dataUrl, "JPEG", 0, 0, img.width, img.height, undefined, "FAST");
+      });
 
-      // Kids string & Page Objects
-      const pageObjIds: number[] = [];
-      let objCounter = 3;
-
-      const pageDetails: { pageId: number; imageObjId: number; streamObjId: number; img: typeof pdfImages[0] }[] = [];
-
-      for (const img of pdfImages) {
-        const pageId = objCounter++;
-        const imageObjId = objCounter++;
-        const streamObjId = objCounter++;
-        pageObjIds.push(pageId);
-        pageDetails.push({ pageId, imageObjId, streamObjId, img });
-      }
-
-      // 2: Pages tree
-      addObject(`2 0 obj\n<< /Type /Pages /Kids [${pageObjIds.map((id) => `${id} 0 R`).join(" ")}] /Count ${pdfImages.length} >>\nendobj`);
-
-      for (const item of pageDetails) {
-        const w = 595.28; // A4 Width in pts
-        const h = (item.img.height * w) / item.img.width; // Proportional Height
-
-        // Page Object
-        addObject(`${item.pageId} 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w.toFixed(2)} ${h.toFixed(2)}] /Contents ${item.streamObjId} 0 R /Resources << /XObject << /Im1 ${item.imageObjId} 0 R >> >> >>\nendobj`);
-
-        // Image XObject (Extract clean JPEG data)
-        const canvas = document.createElement("canvas");
-        canvas.width = item.img.width;
-        canvas.height = item.img.height;
-        const ctx = canvas.getContext("2d");
-        const baseImg = new Image();
-        baseImg.src = item.img.dataUrl;
-        await new Promise((res) => { baseImg.onload = res; });
-        ctx?.drawImage(baseImg, 0, 0);
-        const jpegData = canvas.toDataURL("image/jpeg", 0.85).split(",")[1];
-        const binaryJpeg = atob(jpegData);
-
-        addObject(`${item.imageObjId} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${item.img.width} /Height ${item.img.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${binaryJpeg.length} >>\nstream\n${binaryJpeg}\nendstream\nendobj`);
-
-        // Content Stream for Page Drawing
-        const streamData = `q\n${w.toFixed(2)} 0 0 ${h.toFixed(2)} 0 0 cm\n/Im1 Do\nQ`;
-        addObject(`${item.streamObjId} 0 obj\n<< /Length ${streamData.length} >>\nstream\n${streamData}\nendstream\nendobj`);
-      }
-
-      // XRef Table
-      const xrefOffset = pdfContent.length;
-      pdfContent += `xref\n0 ${objectOffsets.length + 1}\n0000000000 65535 f \n`;
-      for (const offset of objectOffsets) {
-        pdfContent += `${offset.toString().padStart(10, "0")} 00000 n \n`;
-      }
-
-      // Trailer
-      pdfContent += `trailer\n<< /Size ${objectOffsets.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
-
-      // Trigger Download
-      const blob = new Blob([pdfContent], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `compiled_document_${Date.now()}.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
+      doc.save(`compiled_document_${Date.now()}.pdf`);
     } catch (err) {
-      console.error(err);
-      alert("Error generating PDF stream.");
+      console.error("PDF Generation Error:", err);
+      alert("Error compiling PDF. Check console for details.");
     } finally {
       setGeneratingPdf(false);
     }
@@ -183,17 +129,16 @@ export default function MediaToolsPage() {
       const hex = Array.from(uint).map((b) => b.toString(16).padStart(2, "0").toUpperCase()).join(" ");
       setMagicHex(hex);
 
-      // Signature Matching
       if (hex.startsWith("89 50 4E 47 0D 0A 1A 0A")) setDetectedType("PNG Image (.png)");
       else if (hex.startsWith("FF D8 FF")) setDetectedType("JPEG / JPG Image (.jpg)");
       else if (hex.startsWith("25 50 44 46")) setDetectedType("Adobe PDF Document (.pdf)");
-      else if (hex.startsWith("50 4B 03 04")) setDetectedType("ZIP Archive / DOCX / XLSX / APK (.zip)");
-      else if (hex.startsWith("52 61 72 21 1A 07")) setDetectedType("RAR Compressed Archive (.rar)");
+      else if (hex.startsWith("50 4B 03 04")) setDetectedType("ZIP Archive / DOCX / APK (.zip)");
+      else if (hex.startsWith("52 61 72 21 1A 07")) setDetectedType("RAR Archive (.rar)");
       else if (hex.startsWith("47 49 46 38")) setDetectedType("GIF Animation (.gif)");
       else if (hex.startsWith("52 49 46 46") && hex.includes("57 45 42 50")) setDetectedType("WebP Image (.webp)");
-      else if (hex.startsWith("4D 5A")) setDetectedType("Windows Executable / DLL (.exe, .dll)");
+      else if (hex.startsWith("4D 5A")) setDetectedType("Windows Executable / DLL (.exe)");
       else if (hex.startsWith("7F 45 4C 46")) setDetectedType("Linux ELF Binary (.bin, .elf)");
-      else setDetectedType("Unknown Binary Stream / Generic Data");
+      else setDetectedType("Unknown Binary Stream");
     };
     reader.readAsArrayBuffer(f.slice(0, 32));
   };
@@ -211,7 +156,6 @@ export default function MediaToolsPage() {
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0);
 
-      // Repaint onto clean canvas wipes all EXIF/GPS tags
       canvas.toBlob((blob) => {
         if (!blob) return;
         setStrippedUrl(URL.createObjectURL(blob));
@@ -268,7 +212,7 @@ export default function MediaToolsPage() {
               <CardHeader>
                 <CardTitle className="text-base text-white">Select Images to Compile</CardTitle>
                 <CardDescription className="text-xs text-slate-400">
-                  Select one or more PNG, JPG, or WebP files to bundle into a single PDF document.
+                  Select one or more PNG, JPG, or WebP files to bundle into a single crisp PDF document.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -303,7 +247,7 @@ export default function MediaToolsPage() {
                       disabled={generatingPdf}
                       className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 shadow-lg shadow-indigo-600/25"
                     >
-                      {generatingPdf ? "Compiling PDF Stream..." : "📥 Download Compiled PDF"}
+                      {generatingPdf ? "Compiling PDF..." : "📥 Download Compiled PDF"}
                     </Button>
                   </div>
                 )}
@@ -312,7 +256,7 @@ export default function MediaToolsPage() {
           </div>
         )}
 
-        {/* 2. Image Transcoder & Compressor */}
+        {/* 2. Image Transcoder */}
         {activeTab === "transcode" && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <Card className="bg-slate-900/60 border-slate-800 shadow-2xl">
@@ -424,7 +368,7 @@ export default function MediaToolsPage() {
           </div>
         )}
 
-        {/* 4. Privacy EXIF Stripper */}
+        {/* 4. EXIF Stripper */}
         {activeTab === "metadata" && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <Card className="bg-slate-900/60 border-slate-800 shadow-2xl">
