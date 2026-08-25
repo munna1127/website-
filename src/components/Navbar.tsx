@@ -9,13 +9,13 @@ export default function Navbar() {
   const navLinks = [
     { name: "Projects", href: "/projects" },
     { name: "About", href: "/about" },
+    { name: "CVSS", href: "/tools/cvss" },
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
     { name: "WAF", href: "/tools/waf" },
     { name: "IOC", href: "/tools/ioc" },
     { name: "Subnet", href: "/tools/subnet" },
     { name: "Hash", href: "/tools/hash" },
-    { name: "Encoder", href: "/tools/encoder" },
     { name: "Status", href: "/status", isStatus: true },
     { name: "Contact", href: "/contact" },
   ];
@@ -36,7 +36,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`px-2 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-2 py-1 rounded-md text-xs font-medium transition ${
                 link.isStatus
                   ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
@@ -54,7 +54,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile & Tablet Actions */}
+        {/* Mobile View */}
         <div className="flex xl:hidden items-center gap-2">
           <Link
             href="/dashboard"
