@@ -11,6 +11,7 @@ export default function Navbar() {
     { name: "About", href: "/about" },
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
+    { name: "WAF", href: "/tools/waf" },
     { name: "Hash", href: "/tools/hash" },
     { name: "Encoder", href: "/tools/encoder" },
     { name: "Status", href: "/status", isStatus: true },
@@ -33,7 +34,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className={`px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition ${
+              className={`px-2 py-1.5 rounded-lg text-xs font-medium transition ${
                 link.isStatus
                   ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
@@ -45,13 +46,13 @@ export default function Navbar() {
           ))}
           <Link
             href="/dashboard"
-            className="ml-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-lg transition shadow-md shadow-indigo-600/20"
+            className="ml-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition shadow-md shadow-indigo-600/20"
           >
             Dashboard
           </Link>
         </nav>
 
-        {/* Mobile Actions */}
+        {/* Mobile View */}
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/dashboard"
