@@ -12,23 +12,71 @@ export default function OcrExtractorPage() {
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState("");
   const [extractedText, setExtractedText] = useState("");
-  const [outputTab, setOutputTab] = useState<"text" | "html" | "preview">("html");
+  const [outputTab, setOutputTab] = useState<"page" | "code" | "text">("page");
   const [copied, setCopied] = useState(false);
 
-  // Convert raw text into structured HTML elements
-  const textToHtml = (text: string) => {
+  // Generate a Full Styled HTML Page Boilerplate with Tailwind CSS
+  const generateCompleteHtmlPage = (text: string) => {
     if (!text.trim()) return "";
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-    const htmlLines = lines.map((line) => {
-      if (line.length < 40 && (line.toUpperCase() === line || !line.endsWith("."))) {
-        return `<h2>${line}</h2>`;
+
+    let contentHtml = "";
+    let currentCardItems = "";
+
+    lines.forEach((line, idx) => {
+      const isHeader = line.length < 40 && (line.toUpperCase() === line || line.includes(":") || !line.endsWith("."));
+      
+      if (isHeader) {
+        if (currentCardItems) {
+          contentHtml += `<div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg">${currentCardItems}</div>\n`;
+          currentCardItems = "";
+        }
+        currentCardItems += `<h3 class="text-sm font-bold text-indigo-400 uppercase tracking-wider border-b border-slate-800/80 pb-2">${line}</h3>\n`;
+      } else {
+        currentCardItems += `<p class="text-xs text-slate-300 font-mono leading-relaxed">${line}</p>\n`;
       }
-      if (line.startsWith("- ") || line.startsWith("* ") || line.startsWith("• ")) {
-        return `<li>${line.replace(/^[-*•]\s*/, "")}</li>`;
-      }
-      return `<p>${line}</p>`;
     });
-    return htmlLines.join("\n");
+
+    if (currentCardItems) {
+      contentHtml += `<div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 space-y-3 shadow-lg">${currentCardItems}</div>\n`;
+    }
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitized OCR UI Report</title>
+    <!-- Tailwind CSS CDN for instant styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white p-6 sm:p-10">
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <!-- Header Banner -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-md flex items-center justify-between">
+            <div class="space-y-1">
+                <span class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-mono text-[10px] font-semibold">
+                    ⚡ OCR Digitized UI Document
+                </span>
+                <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Extracted Telemetry Report</h1>
+                <p class="text-xs text-slate-400">Generated via Neural Vision Processing</p>
+            </div>
+            <div class="h-3 w-3 rounded-full bg-emerald-400 animate-pulse"></div>
+        </div>
+
+        <!-- Content Grid Structure -->
+        <div class="grid grid-cols-1 gap-4">
+            ${contentHtml}
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-slate-500 pt-6 border-t border-slate-800/80">
+            <p>© 2026 Digitized Document Pipeline. Rendered with Tailwind CSS.</p>
+        </footer>
+    </div>
+</body>
+</html>`;
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +99,7 @@ export default function OcrExtractorPage() {
         logger: (m) => {
           if (m.status === "recognizing text") {
             setProgress(Math.round(m.progress * 100));
-            setStatusText(`Recognizing glyphs: ${Math.round(m.progress * 100)}%`);
+            setStatusText(`Scanning glyphs: ${Math.round(m.progress * 100)}%`);
           } else {
             setStatusText(m.status);
           }
@@ -63,13 +111,23 @@ export default function OcrExtractorPage() {
       await worker.terminate();
     } catch (err) {
       console.error(err);
-      setStatusText("OCR Processing Error. Please try another image.");
+      setStatusText("OCR Processing Error.");
     } finally {
       setLoading(false);
     }
   };
 
-  const generatedHtml = textToHtml(extractedText);
+  const fullHtmlDocument = generateCompleteHtmlPage(extractedText);
+
+  const downloadHtmlFile = () => {
+    const blob = new Blob([fullHtmlDocument], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `digitized_report_${Date.now()}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const copyContent = (content: string) => {
     navigator.clipboard.writeText(content);
@@ -86,22 +144,22 @@ export default function OcrExtractorPage() {
         {/* Header */}
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-semibold">
-            🧠 Neural OCR & Document Digitization
+            🧠 Neural OCR & Styled UI Generator
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Image to Text & HTML Converter
+            Image to Styled HTML Page Converter
           </h1>
           <p className="text-slate-400 text-sm max-w-2xl leading-relaxed">
-            Client-side optical character recognition engine that converts screenshots, documents, and book pages into structured semantic HTML or plaintext.
+            Convert screenshots and images into a fully styled, responsive HTML web page complete with modern card layouts and Tailwind CSS.
           </p>
         </div>
 
-        {/* Upload & Controls */}
+        {/* Upload Card */}
         <Card className="bg-slate-900/60 border-slate-800 shadow-2xl">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base text-white">Upload Target Document or Screenshot</CardTitle>
+            <CardTitle className="text-base text-white">Upload Screenshot or Image</CardTitle>
             <CardDescription className="text-xs text-slate-400">
-              Supports PNG, JPG, WebP, and document captures. Processed locally in-browser.
+              Extract text and format it into a professional UI template instantly.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -126,7 +184,7 @@ export default function OcrExtractorPage() {
                       disabled={loading}
                       className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 shadow-lg shadow-indigo-600/30"
                     >
-                      {loading ? "Processing OCR..." : "⚡ Extract Text & Generate HTML"}
+                      {loading ? "Extracting & Formatting..." : "⚡ Generate Styled HTML Page"}
                     </Button>
 
                     {loading && (
@@ -155,12 +213,12 @@ export default function OcrExtractorPage() {
           <div className="space-y-4 animate-in fade-in duration-200 font-mono text-xs">
             
             {/* View Mode Tabs */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-slate-800 pb-3">
               <div className="flex gap-2">
                 {[
-                  { id: "html", label: "Semantic HTML Code" },
-                  { id: "preview", label: "Live HTML Preview" },
-                  { id: "text", label: "Raw Plain Text" },
+                  { id: "page", label: "🖥️ Live UI Page Preview" },
+                  { id: "code", label: "📄 HTML Source Code" },
+                  { id: "text", label: "📝 Plain Text" },
                 ].map((t) => (
                   <button
                     key={t.id}
@@ -176,32 +234,51 @@ export default function OcrExtractorPage() {
                 ))}
               </div>
 
-              <Button
-                onClick={() => copyContent(outputTab === "html" ? generatedHtml : extractedText)}
-                size="sm"
-                variant="outline"
-                className="border-slate-800 bg-slate-900 text-[10px] h-7 px-2.5 text-slate-300"
-              >
-                {copied ? "✓ Copied" : "Copy Output"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={downloadHtmlFile}
+                  size="sm"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] h-7 px-3 font-bold"
+                >
+                  📥 Download .html File
+                </Button>
+                <Button
+                  onClick={() => copyContent(outputTab === "code" ? fullHtmlDocument : extractedText)}
+                  size="sm"
+                  variant="outline"
+                  className="border-slate-800 bg-slate-900 text-[11px] h-7 px-3 text-slate-300"
+                >
+                  {copied ? "✓ Copied" : "Copy Code"}
+                </Button>
+              </div>
             </div>
 
-            {/* Tab 1: HTML Source */}
-            {outputTab === "html" && (
-              <Card className="bg-slate-900/60 border-slate-800 shadow-xl overflow-hidden">
-                <CardContent className="p-4">
-                  <pre className="bg-slate-950 p-4 rounded-lg border border-slate-800 text-indigo-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">
-                    {generatedHtml}
-                  </pre>
+            {/* Tab 1: Live UI Page Preview inside sandboxed iframe */}
+            {outputTab === "page" && (
+              <Card className="bg-slate-900/60 border-slate-800 shadow-2xl overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="bg-slate-950 p-2 border-b border-slate-800 text-[11px] text-slate-400 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-red-500 inline-block"></span>
+                    <span className="h-2 w-2 rounded-full bg-amber-500 inline-block"></span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block"></span>
+                    <span className="ml-2 font-mono text-slate-500">sandbox://digitized-preview.html</span>
+                  </div>
+                  <iframe
+                    srcDoc={fullHtmlDocument}
+                    className="w-full h-[500px] bg-slate-950 border-0"
+                    title="Live UI Preview"
+                  />
                 </CardContent>
               </Card>
             )}
 
-            {/* Tab 2: Live HTML Preview */}
-            {outputTab === "preview" && (
-              <Card className="bg-slate-900/60 border-slate-800 shadow-xl">
-                <CardContent className="p-6 font-sans text-slate-200 prose prose-invert max-w-none space-y-3 leading-relaxed">
-                  <div dangerouslySetInnerHTML={{ __html: generatedHtml }} />
+            {/* Tab 2: Full HTML Source Code */}
+            {outputTab === "code" && (
+              <Card className="bg-slate-900/60 border-slate-800 shadow-xl overflow-hidden">
+                <CardContent className="p-4">
+                  <pre className="bg-slate-950 p-4 rounded-lg border border-slate-800 text-indigo-300 overflow-x-auto whitespace-pre-wrap leading-relaxed text-[11px]">
+                    {fullHtmlDocument}
+                  </pre>
                 </CardContent>
               </Card>
             )}
@@ -223,7 +300,7 @@ export default function OcrExtractorPage() {
       </main>
 
       <footer className="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500">
-        <p>© 2026 Aryan Tomar. Client-Side Neural OCR & Document Digitization Engine.</p>
+        <p>© 2026 Aryan Tomar. Client-Side Neural OCR & Styled UI Generator.</p>
       </footer>
     </div>
   );
