@@ -12,6 +12,7 @@ export default function Navbar() {
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
     { name: "WAF", href: "/tools/waf" },
+    { name: "Subnet", href: "/tools/subnet" },
     { name: "Hash", href: "/tools/hash" },
     { name: "Encoder", href: "/tools/encoder" },
     { name: "Status", href: "/status", isStatus: true },
@@ -29,12 +30,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               href={link.href}
-              className={`px-2 py-1.5 rounded-lg text-xs font-medium transition ${
+              className={`px-2 py-1 rounded-md text-xs font-medium transition ${
                 link.isStatus
                   ? "text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
@@ -53,7 +54,7 @@ export default function Navbar() {
         </nav>
 
         {/* Mobile View */}
-        <div className="flex md:hidden items-center gap-2">
+        <div className="flex lg:hidden items-center gap-2">
           <Link
             href="/dashboard"
             className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium px-2.5 py-1.5 rounded-md shadow-sm"
@@ -81,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950/98 px-4 py-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden border-b border-slate-800 bg-slate-950/98 px-4 py-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => (
             <Link
               key={link.name}
