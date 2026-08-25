@@ -9,6 +9,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Projects", href: "/projects" },
     { name: "About", href: "/about" },
+    { name: "Ports", href: "/tools/ports" },
     { name: "CVSS", href: "/tools/cvss" },
     { name: "Entropy", href: "/tools/entropy" },
     { name: "Recon", href: "/tools/recon" },
