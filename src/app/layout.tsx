@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aryan Tomar | Security Researcher & Systems Automation",
-  description: "Systems programming, threat intelligence, and automation portfolio",
+  title: "Aryan Tomar | Security Researcher",
+  description: "Systems programming and security automation portfolio",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className="bg-slate-950 text-slate-100 min-h-screen antialiased">
         {children}
       </body>
