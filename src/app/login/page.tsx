@@ -1,15 +1,12 @@
-"from client";
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,13 +25,14 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (data.success) {
-        router.push("/dashboard");
+        // Direct hard redirect to force browser cookie dispatch
+        window.location.href = "/dashboard";
       } else {
         setError(data.error || "Authentication failed");
+        setLoading(false);
       }
     } catch {
       setError("Network error occurred");
-    } finally {
       setLoading(false);
     }
   };
@@ -80,7 +78,7 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-600/25"
               >
-                {loading ? "Authenticating..." : "Authorize Session →"}
+                {loading ? "Authorizing Session..." : "Authorize Session →"}
               </Button>
             </form>
           </CardContent>
