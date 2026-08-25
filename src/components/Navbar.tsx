@@ -9,7 +9,8 @@ export default function Navbar() {
   const navLinks = [
     { name: "Projects", href: "/projects" },
     { name: "About", href: "/about" },
-    { name: "Tools", href: "/tools/entropy" },
+    { name: "Entropy", href: "/tools/entropy" },
+    { name: "Recon", href: "/tools/recon" },
     { name: "Status", href: "/status", isStatus: true },
     { name: "Contact", href: "/contact" },
   ];
@@ -50,7 +51,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile Actions: Dashboard Button + Hamburger Menu */}
+        {/* Mobile Actions */}
         <div className="flex md:hidden items-center gap-2">
           <Link
             href="/dashboard"
@@ -77,7 +78,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Dropdown Drawer */}
+      {/* Mobile Drawer */}
       {isOpen && (
         <div className="md:hidden border-b border-slate-800 bg-slate-950/98 px-4 py-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
           {navLinks.map((link) => (
