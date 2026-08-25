@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
+import { cookies } from "next/headers";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -24,7 +25,6 @@ async function ensureTable() {
 async function sendTelegramAlert(name: string, contact: string, subject: string, message: string) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-
   if (!botToken || !chatId) return;
 
   const text = `🚨 *New Portfolio Transmission*\n\n` +
@@ -38,19 +38,22 @@ async function sendTelegramAlert(name: string, contact: string, subject: string,
     await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: text,
-        parse_mode: "Markdown",
-      }),
+      body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: "Markdown" }),
     });
   } catch (err) {
-    console.error("Telegram dispatch error:", err);
+    console.error("Telegram alert error:", err);
   }
 }
 
+// GET: Protected (Only Admin can read inbox)
 export async function GET() {
   try {
+    const cookieStore = cookies();
+    const session = cookieStore.get("auth_session");
+    if (!session || session.value !== "authenticated_true") {
+      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 401 });
+    }
+
     await ensureTable();
     const result = await pool.query(`SELECT * FROM "ContactMessage" ORDER BY "createdAt" DESC;`);
     return NextResponse.json({ success: true, messages: result.rows });
@@ -59,6 +62,7 @@ export async function GET() {
   }
 }
 
+// POST: Public (Anyone can send contact message)
 export async function POST(req: Request) {
   try {
     await ensureTable();
@@ -74,7 +78,6 @@ export async function POST(req: Request) {
       [id, name, contact, subject || "General Inquiry", message]
     );
 
-    // Send instant Telegram alert in background
     await sendTelegramAlert(name, contact, subject, message);
 
     return NextResponse.json({ success: true, message: "Stored and dispatched successfully" });
@@ -83,8 +86,15 @@ export async function POST(req: Request) {
   }
 }
 
+// DELETE: Protected (Only Admin can delete messages)
 export async function DELETE(req: Request) {
   try {
+    const cookieStore = cookies();
+    const session = cookieStore.get("auth_session");
+    if (!session || session.value !== "authenticated_true") {
+      return NextResponse.json({ success: false, error: "Unauthorized access" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ success: false, error: "ID required" }, { status: 400 });

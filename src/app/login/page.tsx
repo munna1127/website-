@@ -1,3 +1,4 @@
+"from client";
 "use client";
 
 import { useState } from "react";
@@ -8,10 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +20,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
@@ -29,67 +30,67 @@ export default function LoginPage() {
       if (data.success) {
         router.push("/dashboard");
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || "Authentication failed");
       }
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
+    } catch {
+      setError("Network error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white">
+    <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 selection:bg-indigo-500">
       <div className="w-full max-w-md space-y-6">
-        
-        {/* Brand / Header */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-block font-extrabold text-2xl text-white tracking-tight">
-            🚀 MyPlatform
+          <Link href="/" className="font-extrabold text-xl text-white inline-flex items-center gap-2">
+            🚀 Aryan Tomar
           </Link>
-          <p className="text-slate-400 text-sm">Secure Admin & Database Access</p>
+          <p className="text-slate-400 text-xs">Restricted Access • Admin Authorization Required</p>
         </div>
 
-        {/* Login Card */}
-        <Card className="bg-slate-900/80 border-slate-800 shadow-2xl backdrop-blur-md">
+        <Card className="bg-slate-900/60 border-slate-800 shadow-2xl backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-xl text-white">Sign In</CardTitle>
-            <CardDescription className="text-slate-400 text-sm">
-              Enter master password to access dashboard. (Default: <code className="text-indigo-400 bg-indigo-500/10 px-1 py-0.5 rounded font-mono">admin123</code>)
+            <CardTitle className="text-lg text-white">🔐 Security Authentication</CardTitle>
+            <CardDescription className="text-slate-400 text-xs">
+              Enter your master password to access the dashboard and message inbox.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               {error && (
                 <div className="p-3 text-xs rounded bg-red-500/10 border border-red-500/30 text-red-400 font-medium">
-                  {error}
+                  ✕ {error}
                 </div>
               )}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Password</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300 uppercase">Master Password</label>
                 <Input
                   type="password"
                   required
-                  placeholder="Enter password..."
+                  placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-600 focus:border-indigo-500"
                 />
               </div>
-              <Button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-600/25">
-                {loading ? "Authenticating..." : "Access Dashboard"}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-600/25"
+              >
+                {loading ? "Authenticating..." : "Authorize Session →"}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        {/* Back link */}
         <div className="text-center">
           <Link href="/" className="text-xs text-slate-500 hover:text-slate-300 transition">
-            ← Return to Home Page
+            ← Return to Public Portfolio
           </Link>
         </div>
-
       </div>
     </main>
   );
